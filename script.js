@@ -30,7 +30,7 @@ let myChart = new Chart(wheel, {
   type: "pie",
   data: {
     //Labels(values which are to be displayed on chart)
-    labels: ['10 reais','Presente Misterioso','100 reais ','50 reais', '200 reais ','Nada'],
+    labels: ['10 reais','Presente','100 reais ','50 reais', '200 reais ','Nada'],
     //Settings for dataset/pie
     datasets: [
       {
@@ -53,11 +53,35 @@ let myChart = new Chart(wheel, {
       datalabels: {
         color: "#ffffff",
         formatter: (_, context) => context.chart.data.labels[context.dataIndex],
-        font: { size: 24 },
+        font: { size: 16 },
       },
     },
   },
 });
+
+let rotationAngle = 0; // Inicialização da rotação da roleta
+
+// Função para atualizar a rotação do texto de acordo com a rotação da roleta
+function updateTextRotation(angle) {
+  const numSegments = 6; // Número de segmentos na roleta
+  const segments = document.querySelectorAll('.text-container span');
+
+  // A rotação de cada texto depende da rotação da roleta
+  segments.forEach((span, index) => {
+    // Calcula a rotação do texto, levando em consideração a rotação da roleta e a posição do texto
+    let textRotation = (angle + (index * (360 / numSegments))) % 360;
+    
+    // Define a rotação para o texto
+    span.style.transform = `rotate(${textRotation}deg)`;
+  });
+}
+
+// Função de rotação da roleta
+function rotateWheel() {
+  rotationAngle += 45; // A rotação da roleta, ajuste conforme necessário
+  updateTextRotation(rotationAngle);
+}
+
 //display value based on the randomAngle
 const valueGenerator = (angleValue) => {
   for (let i of rotationValues) {
@@ -70,16 +94,18 @@ const valueGenerator = (angleValue) => {
   }
 };
 
-//Spinner count
+
+
+//Spiner count
 let count = 0;
 //100 rotations for animation and last rotation for result
 let resultValue = 101;
 //Start spinning
 spinBtn.addEventListener("click", () => {
     spinBtn.disabled = true;
-    //Empty final value
-    finalValue.innerHTML = `<p>Que Deus te ajude!</p>`;
-    //Force randomDegree to always fall within the range for value 2
+        finalValue.innerHTML = `<p>Que Deus te ajude!</p>`;
+    
+  // Force randomDegree to always fall within the range for value 2
     let randomDegree = Math.random() < 0.5 
       ? Math.floor(Math.random() * (30 - 0 + 1) + 0) // Range 0-30
       : Math.floor(Math.random() * (360 - 331 + 1) + 331); // Range 331-360
@@ -94,7 +120,9 @@ spinBtn.addEventListener("click", () => {
         count += 1;
         resultValue -= 5;
         myChart.options.rotation = 0;
-      } else if (count > 15 && myChart.options.rotation == randomDegree) {
+      }
+      
+      else if (count > 15 && myChart.options.rotation == randomDegree) {
         valueGenerator(randomDegree);
         clearInterval(rotationInterval);
         count = 0;

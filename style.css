@@ -30,12 +30,38 @@
     height: 100%;
   }
   
-  #wheel {
-    max-height: inherit;
-    width: inherit;
-    top: 0;
-    padding: 0;
-  }
+ /* Centralizar o texto dentro da roleta */
+#wheel {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: inherit;
+  width: inherit;
+  top: 0;
+  padding: 0;
+}
+
+.text-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* Evita interferência no clique */
+}
+
+.text-container span {
+  position: absolute;
+  transform-origin: center;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #ffffff;
+  text-align: center;
+  white-space: nowrap;
+  transform: rotate(0deg); /* A rotação começa em 0, será atualizada via JS */
+}
   
   @keyframes rotate {
     100% {
